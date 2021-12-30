@@ -1,12 +1,10 @@
 'use strict';
 
-const { SlashCommandBuilder } = require("@discordjs/builders");
-
 module.exports = {
-  data: new SlashCommandBuilder()
-    .setName('ping')
-    .setDescription('Replys with Pong!'),
-  async execute(interaction) {
-    await interaction.reply('Pong!');
+  name: 'ping',
+  secondaryCommands: false,
+  validArguments: 'not needed',
+  async execute(message, placeholder) {
+    await message.reply('Pong!');
   }
 };
