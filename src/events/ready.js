@@ -1,9 +1,8 @@
 'use strict';
 
-module.exports = {
-  name: 'ready',
-  once: true,
-  async execute(client) {
-    console.log(`Ready! Logged in as ${client.user.tag}`);
-  }
-};
+module.exports.name = 'ready';
+module.exports.once = true;
+
+module.exports.execute = async function (client) {
+  console.log(`Ready! Logged in as ${client.user.tag}`);
+}

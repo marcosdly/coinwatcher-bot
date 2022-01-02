@@ -1,6 +1,7 @@
 'use strict';
 
 module.exports.name = 'config';
+
 module.exports.secondaryCommands = [
     'add-fiat',
     'del-fiat',
@@ -8,6 +9,7 @@ module.exports.secondaryCommands = [
     'add-crypto',
     'del-crypto'
 ];
+
 module.exports.arguments = {
   fiatCurrency: {
     validFor: this.secondaryCommands.filter((str) => str.includes('fiat')),
@@ -24,6 +26,7 @@ module.exports.arguments = {
     ]
   }
 };
+
 module.exports.validArguments = [
   ...this.arguments.fiatCurrency.values,
   ...this.arguments.cryptoCurrency.values
