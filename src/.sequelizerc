@@ -1,0 +1,14 @@
+// .sequelizerc
+
+// Default options to 'sequelize-cli' commands
+
+'use strict';
+
+const path = require('path');
+
+module.exports = {
+  'config': path.resolve('mysql', 'sequelize', 'config.js'),
+  'models-path': path.resolve('mysql', 'sequelize', 'models'),
+  'seeders-path': path.resolve('mysql', 'sequelize', 'seeders'),
+  'migrations-path': path.resolve('mysql', 'sequelize', 'migrations')
+};
