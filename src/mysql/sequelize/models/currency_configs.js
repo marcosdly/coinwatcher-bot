@@ -5,19 +5,18 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class currency_configs extends Model {
     static associate(models) {
-      models.currency_configs.belongsTo(models.guilds, {
-        foreignKey:'server_id'
+      currency_configs.belongsTo(models.guilds, {
+        foreignKey:'server_id',
       });
     }
   };
-  currency_config.init({
+  currency_configs.init({
     server_id: {
       type: DataTypes.STRING(25),
       allowNull: false,
       autoIncrement: false,
       unique: true,
-      primaryKey: true,
-      
+      primaryKey: true
     },
     fiat_to_show: {
       type: DataTypes.TEXT,
@@ -39,8 +38,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     sequelize,
-    modelName: 'currency_config',
+    modelName: 'currency_configs',
   });
-  currency_config.associate();
-  return currency_config;
+  return currency_configs;
 };

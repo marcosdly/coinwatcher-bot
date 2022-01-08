@@ -5,7 +5,7 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class operational_configs extends Model {
     static associate(models) {
-      models.operational_configs.belongsTo(models.guilds, {
+      operational_configs.belongsTo(models.guilds, {
         foreignKey: 'server_id'
       });
     }

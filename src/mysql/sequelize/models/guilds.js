@@ -5,11 +5,11 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class guilds extends Model {
     static associate(models) {
-      models.guilds.hasOne(models.currency_configs);
-      models.guilds.hasOne(models.operational_configs);
+      guilds.hasOne(models.currency_configs);
+      guilds.hasOne(models.operational_configs);
     }
   };
-  guild.init({
+  guilds.init({
     id: {
       type: DataTypes.STRING(25),
       allowNull: false,
@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     sequelize,
-    modelName: 'guild',
+    modelName: 'guilds',
   });
-  return guild;
+  return guilds;
 };
