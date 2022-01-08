@@ -10,5 +10,8 @@ module.exports = {
   database: mysql.database,
   host: mysql.host,
   port: mysql.port,
-  dialect: 'mysql'
+  dialect: 'mysql',
+  
+  logging: console.log,
+  benchmark: true
 }
