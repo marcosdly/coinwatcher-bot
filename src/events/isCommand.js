@@ -1,13 +1,11 @@
 'use strict';
 
-const {isCommand} = require("../globalFunctions.js");
-
 module.exports.name = 'messageCreate';
 module.exports.once = false;
 
 module.exports.isCommand = function (commandName, logMessage) {
   const {accessSync, constants} = require('fs');
-  const commandFile = `../commands/${commandName}.js`;
+  const commandFile = `${__dirname}/../commands/${commandName}.js`;
 
   try {
     accessSync(commandFile, constants.F_OK);
@@ -37,16 +35,16 @@ module.exports.execute = async function (message) {
     await message.reply('Too much text to be a valid command.');
     return;
   }
-  if (!isCommand(commandName, false)) {
+  if (!this.isCommand(commandName, false)) {
     await message.reply(`${commandName} is not a command.`);
     return;
   }
 
-  const command = require(isCommand(commandName, false));
+  const command = require(this.isCommand(commandName, false));
 
   // Check if the command have sub-commands
   if (!command.secondaryCommands) {
-    const command = require(isCommand(commandName, true));
+    const command = require(this.isCommand(commandName, true));
 
     // Check if that are pre-setted arguments;
     // If that are, then checks if it's generally valid.
@@ -68,7 +66,7 @@ module.exports.execute = async function (message) {
       await message.reply('There was an error while executing this command!');
     }
   } else {
-    let command = require(isCommand(commandName, true));
+    let command = require(this.isCommand(commandName, true));
 
     // Check if sub-command is valid
     if (!(command.secondaryCommands.includes(subCommandName))) {
@@ -90,7 +88,7 @@ module.exports.execute = async function (message) {
 
     // Finally, try run the command, otherwise log the error
     try {
-      command = require(isCommand(subCommandName, true));
+      command = require(this.isCommand(subCommandName, true));
       await command.execute(message, subCommandArgument);
       console.log('Command executed successfully!');
     } catch (error) {

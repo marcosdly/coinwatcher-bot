@@ -5,19 +5,7 @@ const path = require('path');
 const Sequelize = require('sequelize');
 const basename = path.basename(__filename);
 const config = require(__dirname + '/../config.js'); // [env]
-const mysql = require('../../../config.json');
 const db = {};
-
-// const sequelize = new Sequelize({
-//   username: mysql.user,
-//   password: mysql.password, 
-//   database: mysql.database,
-//   host: mysql.host,
-//   port: mysql.port,
-//   dialect: 'mysql',
-//   logging: console.log,
-//   benchmark: true
-// });
 
 let sequelize;
 if (config.use_env_variable) {
