@@ -1,5 +1,12 @@
 {
   "token": "Bot token",
   "clientId": "Client ID from Developer Portal/Application/O2Auth/General",
-  "guildId": "Server ID"
+  "guildId": "Server ID",
+  "mysql": {
+    "user": "user",
+    "password": "password",
+    "host": "host",
+    "port": "port",
+    "database": "default database"
+  }
 }

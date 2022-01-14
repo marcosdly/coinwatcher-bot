@@ -8,43 +8,37 @@ module.exports.validArguments = [
 module.exports.execute = async function (message, crypto) {
   const { isCurrencyValid } = require('./config');
   if (!isCurrencyValid(message, crypto, 'crypto')) return;
-  
+
   const db = require('../mysql/sequelize/models/index');
   const models = db.sequelize.models;
   
-  let alrearyExists, crypto_to_show;
+  let alrearyExists, default_crypto;
   crypto = crypto.toUpperCase();
   
   await models.currency_configs.findByPk(String(message.guildId), {
-    attributes: [ 'crypto_to_show' ]
+    attributes: [ 'default_crypto' ]
   })
   .then(data => {
-    crypto_to_show = data.dataValues.crypto_to_show;
-    if (crypto_to_show === null || crypto_to_show === '') {
+    default_crypto = data.dataValues.default_crypto;
+    if (default_crypto === null) {
       alrearyExists = false;
     } else {
-      alrearyExists = crypto_to_show.includes(crypto);
+      alrearyExists = default_crypto.includes(crypto);
     }
   })
   .catch(err => console.log(err));
 
   if (alrearyExists) {
-    message.reply('crypto already in list.');
+    message.reply(`${crypto} already is the default.`);
   } else {
-    if (crypto_to_show === null || crypto_to_show === '') {
-      crypto_to_show = crypto;
-    } else {
-      crypto_to_show += `,${crypto}`;
-    }
-
     await models.currency_configs.update({
-      crypto_to_show: crypto_to_show
+      default_crypto: crypto
     }, {
       where: { server_id: String(message.guildId) },
-      fields: ['crypto_to_show']
+      fields: ['default_crypto']
     })
     .catch(err => console.log(err));
 
-    await message.reply(`Crypto currency (${crypto}) added to the list.\nCurrently selected cryptos: ${crypto_to_show.split(',').join(', ')}`);
+    await message.reply(`${crypto} successfully selected as default.`);
   }
 }

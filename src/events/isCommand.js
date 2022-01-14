@@ -1,13 +1,11 @@
 'use strict';
 
-const {isCommand} = require("../globalFunctions.js");
-
 module.exports.name = 'messageCreate';
 module.exports.once = false;
 
 module.exports.isCommand = function (commandName, logMessage) {
   const {accessSync, constants} = require('fs');
-  const commandFile = `../commands/${commandName}.js`;
+  const commandFile = `${__dirname}/../commands/${commandName}.js`;
 
   try {
     accessSync(commandFile, constants.F_OK);
@@ -37,30 +35,32 @@ module.exports.execute = async function (message) {
     await message.reply('Too much text to be a valid command.');
     return;
   }
-  if (!isCommand(commandName, false)) {
+  if (!this.isCommand(commandName, false)) {
     await message.reply(`${commandName} is not a command.`);
     return;
   }
 
-  const command = require(isCommand(commandName, false));
+  const command = require(this.isCommand(commandName, false));
 
   // Check if the command have sub-commands
   if (!command.secondaryCommands) {
-    const command = require(isCommand(commandName, true));
+    const command = require(this.isCommand(commandName, true));
 
     // Check if that are pre-setted arguments;
-    // If that are, then checks if it's generally valid.
+    // If that are, then checks if it's valid.
     if (command.validArguments !== 'not needed') {
       if (!(command.validArguments.includes(commandArgument))) {
         await message.reply(`**${commandArgument}** is not a valid argument for **${commandName}**.`);
         console.log(`\'${commandArgument}\' is not a valid argument for \'${commandName}\'.`);
         return;
       }
+    } else {
+      console.log('No pre-setted arguments found.');
     }
-    console.log('No pre-setted arguments found.');
 
     // Try run the command, otherwise log the error
     try {
+      console.log('Running command...');
       await command.execute(message, commandArgument);
       console.log('Command executed successfully!');
     } catch (error) {
@@ -68,7 +68,8 @@ module.exports.execute = async function (message) {
       await message.reply('There was an error while executing this command!');
     }
   } else {
-    let command = require(isCommand(commandName, true));
+    let command = require(this.isCommand(commandName, true));
+    let subCommand = require(this.isCommand(subCommandName, true));
 
     // Check if sub-command is valid
     if (!(command.secondaryCommands.includes(subCommandName))) {
@@ -78,20 +79,21 @@ module.exports.execute = async function (message) {
     }
 
     // Check if that are pre-setted arguments;
-    // If that are, then checks if it's generally valid.
-    if (command.validArguments !== 'not needed') {
-      if (!(command.validArguments.includes(subCommandArgument))) {
-        await message.reply(`**${subCommandArgument}** is not a valid argument for any sub-command of **${commandName}**.`);
-        console.log(`\'${subCommandArgument}\' is not a valid argument for any sub-command of \'${commandName}\'.`);
+    // If that are, then checks if it's valid.
+    if (subCommand.validArguments !== 'not needed') {
+      if (!subCommand.validArguments.includes(subCommandArgument)) {
+        await message.reply(`**${subCommandArgument}** is not a valid argument for **${subCommandName}**.`);
+        console.log(`\'${subCommandArgument}\' is not a valid argument for \'${subCommandName}\'.`);
         return;
       }
+    } else {
+      console.log('No pre-setted arguments found.');
     }
-    console.log('No pre-setted arguments found.');
 
     // Finally, try run the command, otherwise log the error
     try {
-      command = require(isCommand(subCommandName, true));
-      await command.execute(message, subCommandArgument);
+      console.log('Running command...');
+      await subCommand.execute(message, subCommandArgument);
       console.log('Command executed successfully!');
     } catch (error) {
       console.error(error);
