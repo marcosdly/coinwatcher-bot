@@ -12,6 +12,6 @@ module.exports = {
   port: mysql.port,
   dialect: 'mysql',
   
-  logging: console.log,
-  benchmark: true
+  logging: false,
+  benchmark: false
 }
