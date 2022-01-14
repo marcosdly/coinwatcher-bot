@@ -1,17 +1,26 @@
 'use strict';
 
+const config = require('./config');
+module.exports.validArguments = [
+  ...config.arguments.fiatCurrency.values
+];
+
 module.exports.execute = async function (message, fiat) {
+  const { isCurrencyValid } = require('./config');
+  if (!isCurrencyValid(message, fiat, 'fiat')) return;
+  
   const db = require('../mysql/sequelize/models/index');
   const models = db.sequelize.models;
   
   let alrearyExists, fiat_to_show;
+  fiat = fiat.toUpperCase();
   
   await models.currency_configs.findByPk(String(message.guildId), {
     attributes: [ 'fiat_to_show' ]
   })
   .then(data => {
     fiat_to_show = data.dataValues.fiat_to_show;
-    if (fiat_to_show === null) {
+    if (fiat_to_show === null || fiat_to_show === '') {
       alrearyExists = false;
     } else {
       alrearyExists = fiat_to_show.includes(fiat);
@@ -22,7 +31,7 @@ module.exports.execute = async function (message, fiat) {
   if (alrearyExists) {
     message.reply('Fiat already in list.');
   } else {
-    if (fiat_to_show === null) {
+    if (fiat_to_show === null || fiat_to_show === '') {
       fiat_to_show = fiat;
     } else {
       fiat_to_show += `,${fiat}`;
