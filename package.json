@@ -28,7 +28,13 @@
   "dependencies": {
     "@discordjs/builders": "^0.10.0",
     "@discordjs/rest": "^0.2.0-canary.0",
+    "colors": "^1.4.0",
     "discord-api-types": "^0.26.0",
-    "discord.js": "^13.4.0"
+    "discord.js": "^13.4.0",
+    "mysql2": "^2.3.3",
+    "sequelize": "^6.12.5"
+  },
+  "devDependencies": {
+    "sequelize-cli": "^6.3.0"
   }
 }

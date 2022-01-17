@@ -29,7 +29,7 @@ for (const file of commandFiles) {
 
   // Set a new item in the Collection with the key as
   // the command name and the value as the exported module
-  client.commands.set(command.data.name, command);
+  client.commands.set(command.name, command);
 }
 
 // Login to dicord with your client's token
